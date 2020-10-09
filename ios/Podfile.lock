@@ -1,0 +1,44 @@
+PODS:
+  - Flutter (1.0.0)
+  - location (0.0.1):
+    - Flutter
+  - Mapbox-iOS-SDK (5.6.1):
+    - MapboxMobileEvents (= 0.10.2)
+  - mapbox_gl (0.0.1):
+    - Flutter
+    - Mapbox-iOS-SDK (~> 5.6.0)
+    - MapboxAnnotationExtension (~> 0.0.1-beta.1)
+  - MapboxAnnotationExtension (0.0.1-beta.1):
+    - Mapbox-iOS-SDK (~> 5.2)
+  - MapboxMobileEvents (0.10.2)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - location (from `.symlinks/plugins/location/ios`)
+  - mapbox_gl (from `.symlinks/plugins/mapbox_gl/ios`)
+
+SPEC REPOS:
+  trunk:
+    - Mapbox-iOS-SDK
+    - MapboxAnnotationExtension
+    - MapboxMobileEvents
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  location:
+    :path: ".symlinks/plugins/location/ios"
+  mapbox_gl:
+    :path: ".symlinks/plugins/mapbox_gl/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
+  Mapbox-iOS-SDK: b31bd62a5dd5b7e688eab787acd3d093a122f4d6
+  mapbox_gl: 48d261b93d7dfc2367c2f93b493ea8f43df5ba96
+  MapboxAnnotationExtension: d66de5561562c9d940153c0135725e671407b781
+  MapboxMobileEvents: 2bc0ca2eedb627b73cf403258dce2b2fa98074a6
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.9.3

@@ -49,7 +49,9 @@ class HomeScreen extends StatelessWidget {
           if (snapshot.hasData) {
             return MapboxMap(
               accessToken: snapshot.data['mapbox_api_token'] as String ?? '',
+              minMaxZoomPreference: MinMaxZoomPreference(6.0, 20.0),
               initialCameraPosition: CameraPosition(
+                zoom: 15.0,
                 target: LatLng(14.508, 46.048),
               ),
               onMapCreated: (MapboxMapController controller) async {

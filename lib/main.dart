@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -17,7 +19,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: COLOR_SECONDARY,
+        statusBarColor: Colors.transparent,
       ),
     );
     return MaterialApp(
@@ -39,7 +41,6 @@ class App extends StatelessWidget {
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIOverlays([]);
     return Scaffold(
       body: FutureBuilder(
         future: loadConfigFile(),
@@ -75,6 +76,7 @@ class HomeScreen extends StatelessWidget {
                   print('Added circle ${circle.id}');
                 }
               },
+              onMapClick: (Point<double> point, LatLng coordinates) {},
             );
           } else if (snapshot.hasError) {
             return Center(

@@ -39,6 +39,7 @@ class App extends StatelessWidget {
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     return Scaffold(
       body: FutureBuilder(
         future: loadConfigFile(),
@@ -56,7 +57,23 @@ class HomeScreen extends StatelessWidget {
               ),
               onMapCreated: (MapboxMapController controller) async {
                 final result = await acquireCurrentLocation();
-                controller.animateCamera(CameraUpdate.newLatLng(result));
+                final animateCameraResult = await controller.animateCamera(
+                  CameraUpdate.newLatLng(result),
+                );
+
+                print('Animate camera result successful: $animateCameraResult');
+                if (animateCameraResult) {
+                  final circle = await controller.addCircle(
+                    CircleOptions(
+                      circleRadius: 8.0,
+                      circleColor: '#006992',
+                      circleOpacity: 0.8,
+                      geometry: result,
+                      draggable: false,
+                    ),
+                  );
+                  print('Added circle ${circle.id}');
+                }
               },
             );
           } else if (snapshot.hasError) {
@@ -78,6 +95,10 @@ class HomeScreen extends StatelessWidget {
             );
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.location_on_sharp),
+        onPressed: () {},
       ),
     );
   }

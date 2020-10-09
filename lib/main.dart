@@ -48,6 +48,8 @@ class App extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
+  MapboxMapController _mapController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +69,7 @@ class HomeScreen extends StatelessWidget {
                 target: LatLng(14.508, 46.048),
               ),
               onMapCreated: (MapboxMapController controller) async {
+                _mapController = controller;
                 final result = await acquireCurrentLocation();
                 final animateCameraResult = await controller.animateCamera(
                   CameraUpdate.newLatLng(result),
@@ -117,7 +120,12 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.location_on_sharp),
-        onPressed: () {},
+        onPressed: () async {
+          final result = await acquireCurrentLocation();
+          _mapController.animateCamera(
+            CameraUpdate.newLatLng(result),
+          );
+        },
       ),
     );
   }

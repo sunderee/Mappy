@@ -8,7 +8,10 @@ class GeocodingModel {
 
   GeocodingModel.fromJson(Map<String, dynamic> json) {
     List<dynamic> queryResult = json['query'];
-    this.coordinates = LatLng(queryResult[0], queryResult[1]);
+    this.coordinates = LatLng(
+      queryResult[0],
+      queryResult[1],
+    );
     this.placeName = json['features'][0]['place_name'];
   }
 }

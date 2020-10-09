@@ -2,12 +2,21 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:mappy/blocs/geocoding.bloc.dart';
+import 'package:mappy/blocs/geocoding.event.dart';
+import 'package:mappy/blocs/geocoding.state.dart';
 import 'package:mappy/utils/config.helper.dart';
 import 'package:mappy/utils/location.helper.dart';
 
 void main() {
-  runApp(App());
+  runApp(
+    BlocProvider(
+      create: (BuildContext context) => GeocodingBloc(),
+      child: App(),
+    ),
+  );
 }
 
 const Color COLOR_PRIMARY = const Color(0xFFFBFAF8);
@@ -49,8 +58,9 @@ class HomeScreen extends StatelessWidget {
           AsyncSnapshot<Map<String, dynamic>> snapshot,
         ) {
           if (snapshot.hasData) {
+            final String token = snapshot.data['mapbox_api_token'] as String;
             return MapboxMap(
-              accessToken: snapshot.data['mapbox_api_token'] as String ?? '',
+              accessToken: token,
               minMaxZoomPreference: MinMaxZoomPreference(6.0, 20.0),
               initialCameraPosition: CameraPosition(
                 zoom: 15.0,
@@ -61,10 +71,8 @@ class HomeScreen extends StatelessWidget {
                 final animateCameraResult = await controller.animateCamera(
                   CameraUpdate.newLatLng(result),
                 );
-
-                print('Animate camera result successful: $animateCameraResult');
                 if (animateCameraResult) {
-                  final circle = await controller.addCircle(
+                  await controller.addCircle(
                     CircleOptions(
                       circleRadius: 8.0,
                       circleColor: '#006992',
@@ -73,10 +81,19 @@ class HomeScreen extends StatelessWidget {
                       draggable: false,
                     ),
                   );
-                  print('Added circle ${circle.id}');
                 }
               },
-              onMapClick: (Point<double> point, LatLng coordinates) {},
+              onMapClick: (Point<double> point, LatLng coordinates) {
+                BlocProvider.of<GeocodingBloc>(context)
+                  ..add(
+                    RequestGeocodingEvent(
+                      latitude: coordinates.latitude,
+                      longitude: coordinates.longitude,
+                      mapboxApiKey: token,
+                    ),
+                  );
+                _setupBottomModalSheet(cntx);
+              },
             );
           } else if (snapshot.hasError) {
             return Center(
@@ -102,6 +119,61 @@ class HomeScreen extends StatelessWidget {
         child: Icon(Icons.location_on_sharp),
         onPressed: () {},
       ),
+    );
+  }
+
+  void _setupBottomModalSheet(BuildContext buildContext) {
+    showModalBottomSheet(
+      context: buildContext,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return BlocBuilder<GeocodingBloc, GeocodingState>(
+          builder: (BuildContext cntx, GeocodingState state) {
+            if (state is LoadingGeocodingState) {
+              return Container(
+                height: 158.0,
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(
+                        height: 16.0,
+                      ),
+                      Text('Loading results')
+                    ],
+                  ),
+                ),
+              );
+            } else if (state is SuccessfulGeocodingState) {
+              return Wrap(
+                children: [
+                  ListTile(
+                    title: Text('Coordinates'),
+                    subtitle: Text(
+                      'Lat/long: ${state.result.coordinates.latitude}/${state.result.coordinates.longitude}',
+                    ),
+                  ),
+                  ListTile(
+                    title: Text('Place name'),
+                    subtitle: Text(state.result.placeName),
+                  ),
+                ],
+              );
+            } else if (state is FailedGeocodingState) {
+              return ListTile(
+                title: Text('Error'),
+                subtitle: Text(state.error),
+              );
+            } else {
+              return ListTile(
+                title: Text('Error'),
+                subtitle: Text('Unknown error'),
+              );
+            }
+          },
+        );
+      },
     );
   }
 }

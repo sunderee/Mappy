@@ -14,7 +14,7 @@ class ApiRepository implements IApiRepository {
     String accessToken,
   ) async {
     final result = await _provider.makeGetRequest(
-      'geocoding/v5/mapbox.places/$latitude,$longitude.json',
+      'geocoding/v5/mapbox.places/$longitude,$latitude.json',
       queryParams: {
         'types': 'region',
         'access_token': accessToken,

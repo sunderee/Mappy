@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mappy/api/repositories/api.repository.dart';
 import 'package:mappy/utils/config.helper.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  setUpAll(() => HttpOverrides.global = null);
+
   group('testing Mapbox API', () {
     test('geocoding result', () async {
       final repository = ApiRepository.instance;

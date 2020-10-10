@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -71,20 +72,19 @@ class HomeScreen extends StatelessWidget {
               onMapCreated: (MapboxMapController controller) async {
                 _mapController = controller;
                 final result = await acquireCurrentLocation();
-                final animateCameraResult = await controller.animateCamera(
+                await controller.animateCamera(
                   CameraUpdate.newLatLng(result),
                 );
-                if (animateCameraResult) {
-                  await controller.addCircle(
-                    CircleOptions(
-                      circleRadius: 8.0,
-                      circleColor: '#006992',
-                      circleOpacity: 0.8,
-                      geometry: result,
-                      draggable: false,
-                    ),
-                  );
-                }
+
+                await controller.addCircle(
+                  CircleOptions(
+                    circleRadius: 8.0,
+                    circleColor: '#006992',
+                    circleOpacity: 0.8,
+                    geometry: result,
+                    draggable: false,
+                  ),
+                );
               },
               onMapClick: (Point<double> point, LatLng coordinates) {
                 BlocProvider.of<GeocodingBloc>(context)
@@ -154,19 +154,22 @@ class HomeScreen extends StatelessWidget {
                 ),
               );
             } else if (state is SuccessfulGeocodingState) {
-              return Wrap(
-                children: [
-                  ListTile(
-                    title: Text('Coordinates'),
-                    subtitle: Text(
-                      'Lat/long: ${state.result.coordinates.latitude}/${state.result.coordinates.longitude}',
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Wrap(
+                  children: [
+                    ListTile(
+                      title: Text('Coordinates'),
+                      subtitle: Text(
+                        'Lat/long: ${state.result.coordinates.latitude}/${state.result.coordinates.longitude}',
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: Text('Place name'),
-                    subtitle: Text(state.result.placeName),
-                  ),
-                ],
+                    ListTile(
+                      title: Text('Place name'),
+                      subtitle: Text(state.result.placeName),
+                    ),
+                  ],
+                ),
               );
             } else if (state is FailedGeocodingState) {
               return ListTile(

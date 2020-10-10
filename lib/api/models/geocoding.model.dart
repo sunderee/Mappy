@@ -14,4 +14,7 @@ class GeocodingModel {
     );
     this.placeName = json['features'][0]['place_name'];
   }
+
+  @override
+  String toString() => '$runtimeType: ${coordinates.toJson()}, $placeName';
 }

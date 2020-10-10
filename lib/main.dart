@@ -49,10 +49,9 @@ class App extends StatelessWidget {
 }
 
 class HomeScreen extends StatelessWidget {
-  MapboxMapController _mapController;
-
   @override
   Widget build(BuildContext context) {
+    MapboxMapController _mapController;
     return Scaffold(
       body: FutureBuilder(
         future: loadConfigFile(),
@@ -154,6 +153,10 @@ class HomeScreen extends StatelessWidget {
                 ),
               );
             } else if (state is SuccessfulGeocodingState) {
+              final latitudeString =
+                  state.result.coordinates.latitude.toStringAsPrecision(5);
+              final longitudeString =
+                  state.result.coordinates.longitude.toStringAsPrecision(5);
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Wrap(
@@ -161,7 +164,7 @@ class HomeScreen extends StatelessWidget {
                     ListTile(
                       title: Text('Coordinates'),
                       subtitle: Text(
-                        'Lat/long: ${state.result.coordinates.latitude}/${state.result.coordinates.longitude}',
+                        'As lat/long: $latitudeString/$longitudeString',
                       ),
                     ),
                     ListTile(

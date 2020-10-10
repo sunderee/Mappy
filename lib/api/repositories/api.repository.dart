@@ -1,5 +1,5 @@
 import 'package:mappy/api/models/geocoding.model.dart';
-import 'package:mappy/api/providers/api.repository.dart';
+import 'package:mappy/api/providers/api.provider.dart';
 import 'package:mappy/api/repositories/iapi.repository.dart';
 
 class ApiRepository implements IApiRepository {

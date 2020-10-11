@@ -60,9 +60,11 @@ class HomeScreen extends StatelessWidget {
         ) {
           if (snapshot.hasData) {
             final String token = snapshot.data['mapbox_api_token'] as String;
+            final String style = snapshot.data['mapbox_style_url'] as String;
             return MapboxMap(
               accessToken: token,
-              minMaxZoomPreference: MinMaxZoomPreference(6.0, 20.0),
+              styleString: style,
+              minMaxZoomPreference: const MinMaxZoomPreference(6.0, null),
               initialCameraPosition: CameraPosition(
                 zoom: 15.0,
                 target: LatLng(14.508, 46.048),
@@ -94,6 +96,15 @@ class HomeScreen extends StatelessWidget {
                   );
                 _setupBottomModalSheet(cntx);
               },
+              onMapLongClick: (Point<double> point, LatLng coordinates) async {
+                await _mapController.addSymbol(
+                  SymbolOptions(
+                    iconImage: 'embassy-15',
+                    iconColor: '#006992',
+                    geometry: coordinates,
+                  ),
+                );
+              },
             );
           } else if (snapshot.hasError) {
             return Center(
@@ -119,9 +130,7 @@ class HomeScreen extends StatelessWidget {
         child: Icon(Icons.location_on_sharp),
         onPressed: () async {
           final result = await acquireCurrentLocation();
-          _mapController.animateCamera(
-            CameraUpdate.newLatLng(result),
-          );
+          _mapController.animateCamera(CameraUpdate.newLatLng(result));
         },
       ),
     );
@@ -160,9 +169,9 @@ class HomeScreen extends StatelessWidget {
                 child: Wrap(
                   children: [
                     ListTile(
-                      title: Text('Coordinates'),
+                      title: Text('Coordinates (latitude/longitude)'),
                       subtitle: Text(
-                        'As lat/long: $latitudeString/$longitudeString',
+                        '$latitudeString/$longitudeString',
                       ),
                     ),
                     ListTile(

@@ -8,6 +8,7 @@ Before building the application, you need to provide a `config.json` file in the
 
 ```json
 {
-  "mapbox_api_token": "XXX"
+  "mapbox_api_token": "XXX",
+  "mapbox_style_url": "XXX"
 }
 ```

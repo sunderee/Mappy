@@ -6,7 +6,6 @@ Future<LatLng> acquireCurrentLocation() async {
 
   bool serviceEnabled;
   PermissionStatus permissionGranted;
-  LocationData locationData;
 
   serviceEnabled = await location.serviceEnabled();
   if (!serviceEnabled) {
@@ -24,6 +23,6 @@ Future<LatLng> acquireCurrentLocation() async {
     }
   }
 
-  locationData = await location.getLocation();
+  final LocationData locationData = await location.getLocation();
   return LatLng(locationData.latitude, locationData.longitude);
 }

@@ -15,7 +15,6 @@ class GeocodingBloc extends Bloc<GeocodingEvent, GeocodingState> {
       final result = await _repository.performGeocoding(
         event.latitude,
         event.longitude,
-        event.mapboxApiKey,
       );
 
       if (result.placeName.isNotEmpty) {

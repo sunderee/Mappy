@@ -2,6 +2,8 @@ import 'package:mappy/api/models/geocoding.model.dart';
 import 'package:mappy/api/providers/api.provider.dart';
 import 'package:mappy/api/repositories/iapi.repository.dart';
 
+import '../../utils/config.helper.dart';
+
 class ApiRepository implements IApiRepository {
   static final ApiRepository instance = ApiRepository._();
   final ApiProvider _provider = ApiProvider(baseURL: 'api.mapbox.com');
@@ -11,8 +13,8 @@ class ApiRepository implements IApiRepository {
   Future<GeocodingModel> performGeocoding(
     double latitude,
     double longitude,
-    String accessToken,
   ) async {
+    final accessToken = (await loadConfigFile())['mapbox_api_token'];
     final result = await _provider.makeGetRequest(
       'geocoding/v5/mapbox.places/$longitude,$latitude.json',
       queryParams: {

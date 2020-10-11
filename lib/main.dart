@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -91,7 +90,6 @@ class HomeScreen extends StatelessWidget {
                     RequestGeocodingEvent(
                       latitude: coordinates.latitude,
                       longitude: coordinates.longitude,
-                      mapboxApiKey: token,
                     ),
                   );
                 _setupBottomModalSheet(cntx);

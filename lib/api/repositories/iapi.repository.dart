@@ -4,6 +4,5 @@ abstract class IApiRepository {
   Future<GeocodingModel> performGeocoding(
     double latitude,
     double longitude,
-    String accessToken,
   );
 }

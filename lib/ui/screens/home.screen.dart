@@ -1,6 +1,8 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:mappy/utils/helpers/config.helper.dart';
@@ -60,10 +62,14 @@ class HomeScreen extends StatelessWidget {
                 _setupBottomModalSheet(cntx);
               },
               onMapLongClick: (Point<double> point, LatLng coordinates) async {
+                final ByteData imageBytes =
+                    await rootBundle.load('assets/place_24px.png');
+                final Uint8List bytesList = imageBytes.buffer.asUint8List();
+                await _mapController.addImage('place_icon', bytesList);
                 await _mapController.addSymbol(
                   SymbolOptions(
-                    iconImage: 'embassy-15',
-                    iconColor: '#006992',
+                    iconImage: 'place_icon',
+                    iconSize: 2.5,
                     geometry: coordinates,
                   ),
                 );

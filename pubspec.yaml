@@ -36,3 +36,4 @@ flutter:
   assets:
     - assets/config.json
     - assets/mappy_icon.png
+    - assets/place_24px.png
